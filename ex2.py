@@ -53,7 +53,15 @@ def MLP_classification(portion=1., model=None):
     x_train, y_train, x_test, y_test = get_data(categories=category_dict.keys(), portion=portion)
 
     ########### add your code here ###########
-    return
+    FEATURE_DIM = 2000
+    tfidf = TfidfVectorizer(max_features=FEATURE_DIM) # limit the number of features
+    x_train = tfidf.transform(x_train)
+    x_test = tfidf.transform(x_test)
+
+    model.fit(x_train, y_train)
+    y_pred = model.predict(x_test)
+    accuracy = np.mean(y_pred == y_test)
+    return accuracy
 
 
 # Q3
