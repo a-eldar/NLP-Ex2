@@ -10,8 +10,8 @@ class Perceptron(torch.nn.Module):
 
     def forward(self, x_in):
         return torch.sigmoid(self.fc(x_in).squeeze())
-    
-    def fit(self, x: np.ndarray, y: np.ndarray, n_epochs=100, lr=0.01, callback: Optional[Callable]=None):
+
+    def fit(self, x: torch.Tensor, y: torch.Tensor, n_epochs=100, lr=0.01, callback: Optional[Callable]=None):
         """Fit the model to the data
 
         Args:
@@ -19,12 +19,12 @@ class Perceptron(torch.nn.Module):
             y (np.ndarray): target vector
             n_epochs (int, optional): Defaults to 100.
             lr (float, optional): Defaults to 0.01.
-            callback (Optional[Callable], optional): Receives the loss at each epoch. Defaults to None.
+            callback (Optional[Callable], optional): Receives the model and the loss at each epoch. Defaults to None.
 
         Returns:
             self: the fitted model
         """
-        
+
         optimizer = torch.optim.Adam(self.parameters(), lr=lr)
         criterion = torch.nn.BCELoss()
         for epoch in range(n_epochs):
@@ -34,5 +34,16 @@ class Perceptron(torch.nn.Module):
             loss.backward()
             optimizer.step()
             if callback:
-                callback(loss.item())
+                callback(self, loss.item())
         return self
+
+    def predict(self, x: torch.Tensor) -> torch.Tensor:
+        """Predict the target
+
+        Args:
+            x (np.ndarray): feature matrix
+
+        Returns:
+            np.ndarray: predicted target
+        """
+        return torch.round(self(x)).int()

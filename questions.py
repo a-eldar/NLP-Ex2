@@ -4,23 +4,16 @@ import matplotlib.pyplot as plt
 def question1(portions):
     print("\nSingle layer MLP results:")
 
-    epoch_losses = []
-
-    def callback(loss):
-        nonlocal epoch_losses
-        epoch_losses.append(loss)
-
-
     for p in portions:
         perceptron = Perceptron(input_dim=FEATURE_DIM)
-        accuracy = MLP_classification(portion=p, model=perceptron, callback=callback)
-        # Plot
-        plt.plot(epoch_losses)
-
-    plt.xlabel('Epoch')
-    plt.ylabel('Loss')
-    plt.title('Loss vs Epoch')
-    plt.show()
+        accuracies, epoch_losses = MLP_classification(portion=p, model=perceptron)
+        plt.plot(epoch_losses, color='red', label='Loss')
+        plt.plot(accuracies, color='blue', label='Accuracy')
+        plt.legend()
+        plt.xlabel('Epoch')
+        plt.ylabel('Loss and accuracy')
+        plt.title('Loss vs Epoch')
+        plt.show()
 
 
 if __name__ == "__main__":

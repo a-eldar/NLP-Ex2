@@ -6,6 +6,7 @@
 
 import numpy as np
 from perceptron import Perceptron
+import torch
 
 
 # Constants
@@ -62,11 +63,25 @@ def MLP_classification(portion=1., model=None):
     x_train, y_train, x_test, y_test = get_data(categories=category_dict.keys(), portion=portion)
 
     ########### add your code here ###########
+    epoch_losses = []
+    epoch_accuracies = []
+    def callback(model: Perceptron, loss):
+        nonlocal epoch_losses, epoch_accuracies
+        epoch_losses.append(loss)
+        y_pred = model.predict(x_test)
+        accuracy = np.mean(y_pred == y_test)
+        epoch_accuracies.append(accuracy)
+
     tfidf = TfidfVectorizer(max_features=FEATURE_DIM) # limit the number of features
-    x_train = tfidf.transform(x_train)
+    x_train = tfidf.fit_transform(x_train)
     x_test = tfidf.transform(x_test)
 
-    model.fit(x_train, y_train)
+    x_train = torch.tensor(x_train.toarray(), dtype=torch.float32)
+    y_train = torch.tensor(y_train, dtype=torch.float32)
+    x_test = torch.tensor(x_test.toarray(), dtype=torch.float32)
+    y_test = torch.tensor(y_test, dtype=torch.float32)
+
+    model.fit(x_train, y_train, callback=callback)
     y_pred = model.predict(x_test)
     accuracy = np.mean(y_pred == y_test)
     return accuracy
