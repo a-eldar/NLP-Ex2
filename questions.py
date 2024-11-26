@@ -17,19 +17,24 @@ def question1(portions):
         # Plot
         plt.plot(epoch_losses)
 
+    plt.xlabel('Epoch')
+    plt.ylabel('Loss')
+    plt.title('Loss vs Epoch')
+    plt.show()
+
 
 if __name__ == "__main__":
     portions = [0.1, 0.2, 0.5, 1.]
     # Q1 - single layer MLP
-    question1(FEATURE_DIM, MLP_classification, portions)
+    question1(portions)
 
 
     # Q2 - multi-layer MLP
     pass
 
     # Q3 - Transformer
-    print("\nTransformer results:")
-    for p in portions[:2]:
-        print(f"Portion: {p}")
-        transformer_classification(portion=p)
+    # print("\nTransformer results:")
+    # for p in portions[:2]:
+    #     print(f"Portion: {p}")
+    #     transformer_classification(portion=p)
 
