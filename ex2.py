@@ -7,6 +7,14 @@
 import numpy as np
 from perceptron import Perceptron
 
+
+# Constants
+FEATURE_DIM = 2000
+
+
+
+
+
 # subset of categories that we will use
 category_dict = {'comp.graphics': 'computer graphics',
                  'rec.sport.baseball': 'baseball',
@@ -54,7 +62,6 @@ def MLP_classification(portion=1., model=None):
     x_train, y_train, x_test, y_test = get_data(categories=category_dict.keys(), portion=portion)
 
     ########### add your code here ###########
-    FEATURE_DIM = 2000
     tfidf = TfidfVectorizer(max_features=FEATURE_DIM) # limit the number of features
     x_train = tfidf.transform(x_train)
     x_test = tfidf.transform(x_test)
@@ -140,18 +147,3 @@ def transformer_classification(portion=1.):
     ########### add your code here ###########
     return
 
-
-if __name__ == "__main__":
-    portions = [0.1, 0.2, 0.5, 1.]
-    # Q1 - single layer MLP
-    print("\nSingle layer MLP results:")
-    perceptron = Perceptron()
-
-    # Q2 - multi-layer MLP
-    pass
-
-    # Q3 - Transformer
-    print("\nTransformer results:")
-    for p in portions[:2]:
-        print(f"Portion: {p}")
-        transformer_classification(portion=p)
