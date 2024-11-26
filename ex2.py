@@ -5,6 +5,7 @@
 ###################################################
 
 import numpy as np
+from perceptron import Perceptron
 
 # subset of categories that we will use
 category_dict = {'comp.graphics': 'computer graphics',
@@ -143,7 +144,8 @@ def transformer_classification(portion=1.):
 if __name__ == "__main__":
     portions = [0.1, 0.2, 0.5, 1.]
     # Q1 - single layer MLP
-    pass
+    print("\nSingle layer MLP results:")
+    perceptron = Perceptron()
 
     # Q2 - multi-layer MLP
     pass
