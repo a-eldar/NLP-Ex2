@@ -5,8 +5,8 @@ def question1(portions):
     print("\nSingle layer MLP results:")
 
     for p in portions:
-        perceptron = Perceptron(input_dim=FEATURE_DIM)
-        accuracies, epoch_losses = MLP_classification(portion=p, model=perceptron)
+        perceptron = Perceptron()
+        _, epoch_losses, accuracies = MLP_classification(portion=p, model=perceptron)
         plt.plot(epoch_losses, color='red', label='Loss')
         plt.plot(accuracies, color='blue', label='Accuracy')
         plt.legend()

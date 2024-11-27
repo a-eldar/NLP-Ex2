@@ -5,12 +5,12 @@
 ###################################################
 
 import numpy as np
-from perceptron import Perceptron
+from perceptron import Perceptron, FEATURE_DIM
 import torch
 
 
 # Constants
-FEATURE_DIM = 2000
+
 
 
 
@@ -69,7 +69,7 @@ def MLP_classification(portion=1., model=None):
         nonlocal epoch_losses, epoch_accuracies
         epoch_losses.append(loss)
         y_pred = model.predict(x_test)
-        accuracy = np.mean(y_pred == y_test)
+        accuracy = torch.mean(y_pred == y_test, dtype=torch.float32).item()
         epoch_accuracies.append(accuracy)
 
     tfidf = TfidfVectorizer(max_features=FEATURE_DIM) # limit the number of features
@@ -77,14 +77,14 @@ def MLP_classification(portion=1., model=None):
     x_test = tfidf.transform(x_test)
 
     x_train = torch.tensor(x_train.toarray(), dtype=torch.float32)
-    y_train = torch.tensor(y_train, dtype=torch.float32)
+    y_train = torch.tensor(y_train, dtype=torch.long)
     x_test = torch.tensor(x_test.toarray(), dtype=torch.float32)
-    y_test = torch.tensor(y_test, dtype=torch.float32)
+    y_test = torch.tensor(y_test, dtype=torch.long)
 
     model.fit(x_train, y_train, callback=callback)
     y_pred = model.predict(x_test)
-    accuracy = np.mean(y_pred == y_test)
-    return accuracy
+    accuracy = torch.mean(y_pred == y_test, dtype=torch.float32).item()
+    return accuracy, epoch_losses, epoch_accuracies
 
 
 # Q3
