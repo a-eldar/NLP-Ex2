@@ -121,13 +121,18 @@ def transformer_classification(portion=1.):
         :return: Average loss over the epoch
         """
         model.train()
+        criterion = torch.nn.CrossEntropyLoss()
         total_loss = 0.
         # iterate over batches
         for batch in tqdm(data_loader):
+            optimizer.zero_grad()
             input_ids = batch['input_ids'].to(dev)
             attention_mask = batch['attention_mask'].to(dev)
             labels = batch['labels'].to(dev)
             ########### add your code here ###########
+            loss: torch.Tensor = criterion(model(input_ids), labels)
+            loss.backward()
+            optimizer.step()
         return
 
     def evaluate_model(model, data_loader, dev='cpu', metric=None):
