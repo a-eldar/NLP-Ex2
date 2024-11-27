@@ -15,15 +15,27 @@ def question1(portions):
         plt.title('Loss vs Epoch')
         plt.show()
 
+def question2(portions):
+    print("\nMulti-layer MLP results:")
+    for p in portions:
+        perceptron = Perceptron(hidden_layers=[500])
+        _, epoch_losses, accuracies = MLP_classification(portion=p, model=perceptron)
+        plt.plot(epoch_losses, color='red', label='Loss')
+        plt.plot(accuracies, color='blue', label='Accuracy')
+        plt.legend()
+        plt.xlabel('Epoch')
+        plt.ylabel('Loss and accuracy')
+        plt.title('Loss vs Epoch')
+        plt.show()
 
 if __name__ == "__main__":
     portions = [0.1, 0.2, 0.5, 1.]
     # Q1 - single layer MLP
-    question1(portions)
+    # question1(portions)
 
 
     # Q2 - multi-layer MLP
-    pass
+    question2(portions)
 
     # Q3 - Transformer
     # print("\nTransformer results:")

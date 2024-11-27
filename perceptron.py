@@ -6,9 +6,10 @@ FEATURE_DIM = 2000
 
 
 class Perceptron(torch.nn.Module):
-    def __init__(self):
+    def __init__(self, hidden_layers: list[int]=None):
         super(Perceptron, self).__init__()
         self.fc = None
+        self.hidden_layers = hidden_layers
 
     def forward(self, x_in):
         # return torch.sigmoid(self.fc(x_in).squeeze())
@@ -27,7 +28,19 @@ class Perceptron(torch.nn.Module):
         Returns:
             self: the fitted model
         """
-        self.fc = torch.nn.Linear(FEATURE_DIM, y.unique().shape[0])
+
+        if self.hidden_layers:
+            self.hidden_layers = [FEATURE_DIM] + self.hidden_layers + [y.unique().shape[0]]
+            for i, hidden_layer in enumerate(self.hidden_layers[:-1]):
+                self.hidden_layers[i] = torch.nn.Linear(hidden_layer, self.hidden_layers[i+1])
+            self.hidden_layers.pop()
+            # insert ReLU activation functions
+            self.hidden_layers = [item for sublist in zip(self.hidden_layers, [torch.nn.ReLU()] * len(self.hidden_layers)) for item in sublist]
+            self.hidden_layers.pop()
+            self.fc = torch.nn.Sequential(*self.hidden_layers)
+        else:
+            self.fc = torch.nn.Linear(FEATURE_DIM, y.unique().shape[0])
+
 
         optimizer = torch.optim.Adam(self.parameters(), lr=lr)
         criterion = torch.nn.CrossEntropyLoss()
