@@ -1,4 +1,5 @@
 import torch
+from torch.utils.data import DataLoader, Dataset
 import numpy as np
 from typing import Callable, Optional
 
@@ -15,7 +16,7 @@ class Perceptron(torch.nn.Module):
         # return torch.sigmoid(self.fc(x_in).squeeze())
         return torch.softmax(self.fc(x_in), dim=1)
 
-    def fit(self, x: torch.Tensor, y: torch.Tensor, n_epochs=100, lr=0.01, callback: Optional[Callable]=None):
+    def fit(self, x: torch.Tensor, y: torch.Tensor, n_epochs=20, lr=0.001, batch_size=16, callback: Optional[Callable]=None):
         """Fit the model to the data
 
         Args:
@@ -44,6 +45,9 @@ class Perceptron(torch.nn.Module):
 
         optimizer = torch.optim.Adam(self.parameters(), lr=lr)
         criterion = torch.nn.CrossEntropyLoss()
+        dataset = Dataset(x, y)
+        data_loader = DataLoader(dataset, batch_size=batch_size, shuffle=True)
+
         for epoch in range(n_epochs):
             optimizer.zero_grad()
             y_pred = self(x)

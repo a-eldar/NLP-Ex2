@@ -1,5 +1,6 @@
 from ex2 import *
 import matplotlib.pyplot as plt
+# from torch.nn import Perceptron
 
 def question1(portions):
     print("\nSingle layer MLP results:")
