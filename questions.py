@@ -2,6 +2,23 @@ from ex2 import *
 import matplotlib.pyplot as plt
 # from torch.nn import Perceptron
 
+LOSS_COLOR = 'red'
+ACC_COLOR = 'blue'
+
+def plot_loss_and_acc(epoch_losses, epoch_accuracies):
+    plt.plot(epoch_losses, color=LOSS_COLOR)
+    plt.xlabel('Epoch')
+    plt.ylabel('Loss')
+    plt.title('Loss vs Epoch')
+    plt.show()
+
+    plt.plot(epoch_accuracies, color=ACC_COLOR)
+    plt.xlabel('Epoch')
+    plt.ylabel('Accuracy')
+    plt.title('Accuracy vs Epoch')
+    plt.show()
+
+
 def question1(portions):
     print("\nSingle layer MLP results:")
 
@@ -12,14 +29,9 @@ def question1(portions):
             batch_size=16,
             learning_rate_init=0.001,
         )
-        _, epoch_losses, accuracies = MLP_classification(portion=p, model=perceptron)
-        plt.plot(epoch_losses, color='red', label='Loss')
-        plt.plot(accuracies, color='blue', label='Accuracy')
-        plt.legend()
-        plt.xlabel('Epoch')
-        plt.ylabel('Loss and accuracy')
-        plt.title('Loss vs Epoch')
-        plt.show()
+        _, epoch_losses, epoch_accuracies = MLP_classification(portion=p, model=perceptron)
+        plot_loss_and_acc(epoch_losses, epoch_accuracies)
+
 
 def question2(portions):
     print("\nMulti-layer MLP results:")
@@ -30,14 +42,8 @@ def question2(portions):
             batch_size=16,
             learning_rate_init=0.001,
         )
-        _, epoch_losses, accuracies = MLP_classification(portion=p, model=perceptron)
-        plt.plot(epoch_losses, color='red', label='Loss')
-        plt.plot(accuracies, color='blue', label='Accuracy')
-        plt.legend()
-        plt.xlabel('Epoch')
-        plt.ylabel('Loss and accuracy')
-        plt.title('Loss vs Epoch')
-        plt.show()
+        _, epoch_losses, epoch_accuracies = MLP_classification(portion=p, model=perceptron)
+        plot_loss_and_acc(epoch_losses, epoch_accuracies)
 
 if __name__ == "__main__":
     portions = [0.1, 0.2, 0.5, 1.]
