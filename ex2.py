@@ -5,12 +5,12 @@
 ###################################################
 
 import numpy as np
-from perceptron import Perceptron, FEATURE_DIM
 import torch
+from sklearn.neural_network import MLPClassifier
 
 
 # Constants
-
+FEATURE_DIM = 2000
 
 
 
@@ -53,38 +53,47 @@ def get_data(categories=None, portion=1.):
 
 
 # Q1,2
-def MLP_classification(portion=1., model=None):
+def MLP_classification(portion=1., model: MLPClassifier=None):
     """
     Perform linear classification
-    :param portion: portion of the data to use
-    :return: classification accuracy
+
+    Parameters
+    ----------
+    portion : float
+        portion of the data to use
+    model : MLPClassifier
+        model to use
+
+    Returns
+    -------
+        model: MLPClassifier
+            trained model
+        epoch_losses: list
+            loss at each epoch
+        epoch_accuracies: list
+            accuracy at each epoch
     """
     from sklearn.feature_extraction.text import TfidfVectorizer
     x_train, y_train, x_test, y_test = get_data(categories=category_dict.keys(), portion=portion)
 
     ########### add your code here ###########
-    epoch_losses = []
-    epoch_accuracies = []
-    def callback(model: Perceptron, loss):
-        nonlocal epoch_losses, epoch_accuracies
-        epoch_losses.append(loss)
-        y_pred = model.predict(x_test)
-        accuracy = torch.mean(y_pred == y_test, dtype=torch.float32).item()
-        epoch_accuracies.append(accuracy)
-
+    NUM_EPOCHS = 20
     tfidf = TfidfVectorizer(max_features=FEATURE_DIM) # limit the number of features
     x_train = tfidf.fit_transform(x_train)
     x_test = tfidf.transform(x_test)
 
-    x_train = torch.tensor(x_train.toarray(), dtype=torch.float32)
-    y_train = torch.tensor(y_train, dtype=torch.long)
-    x_test = torch.tensor(x_test.toarray(), dtype=torch.float32)
-    y_test = torch.tensor(y_test, dtype=torch.long)
+    epoch_losses = []
+    epoch_accuracies = []
 
-    model.fit(x_train, y_train, callback=callback)
-    y_pred = model.predict(x_test)
-    accuracy = torch.mean(y_pred == y_test, dtype=torch.float32).item()
-    return accuracy, epoch_losses, epoch_accuracies
+    for epoch in range(NUM_EPOCHS):
+        model.partial_fit(x_train, y_train, classes=np.unique(y_train))
+        accuracy = model.score(x_test, y_test)
+        print(f"Epoch {epoch+1}, accuracy: {accuracy:.3f}")
+        epoch_accuracies.append(accuracy)
+        epoch_losses.append(model.loss_) # loss_ is the loss of the last epoch
+        # MLPClassifier's loss function is log loss which is the same as cross-entropy loss
+
+    return model, epoch_losses, epoch_accuracies
 
 
 # Q3

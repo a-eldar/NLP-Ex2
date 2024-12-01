@@ -6,7 +6,12 @@ def question1(portions):
     print("\nSingle layer MLP results:")
 
     for p in portions:
-        perceptron = Perceptron()
+        perceptron = MLPClassifier(
+            hidden_layer_sizes=[], # single layer
+            solver='adam',
+            batch_size=16,
+            learning_rate_init=0.001,
+        )
         _, epoch_losses, accuracies = MLP_classification(portion=p, model=perceptron)
         plt.plot(epoch_losses, color='red', label='Loss')
         plt.plot(accuracies, color='blue', label='Accuracy')
@@ -19,7 +24,12 @@ def question1(portions):
 def question2(portions):
     print("\nMulti-layer MLP results:")
     for p in portions:
-        perceptron = Perceptron(hidden_layers=[500])
+        perceptron = MLPClassifier(
+            hidden_layer_sizes=[500], # single hidden layer
+            solver='adam',
+            batch_size=16,
+            learning_rate_init=0.001,
+        )
         _, epoch_losses, accuracies = MLP_classification(portion=p, model=perceptron)
         plt.plot(epoch_losses, color='red', label='Loss')
         plt.plot(accuracies, color='blue', label='Accuracy')
