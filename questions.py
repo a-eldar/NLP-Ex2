@@ -30,9 +30,8 @@ def question1(portions):
             learning_rate_init=0.001,
         )
         _, epoch_losses, epoch_accuracies = MLP_classification(portion=p, model=perceptron)
-        print("\nNumber of trainable parameters: ", perceptron.coefs_[0].size + perceptron.intercepts_[0].size)
-        break
-        # plot_loss_and_acc(epoch_losses, epoch_accuracies, p)
+        plot_loss_and_acc(epoch_losses, epoch_accuracies, p)
+    print("\nNumber of trainable parameters: ", perceptron.coefs_[0].size + perceptron.intercepts_[0].size)
 
 
 def question2(portions):
@@ -45,17 +44,16 @@ def question2(portions):
             learning_rate_init=0.001,
         )
         _, epoch_losses, epoch_accuracies = MLP_classification(portion=p, model=perceptron)
-        print("\nNumber of trainable parameters: ", perceptron.coefs_[0].size + perceptron.coefs_[1].size
-              + perceptron.intercepts_[0].size + perceptron.intercepts_[1].size)
-        break
-        # plot_loss_and_acc(epoch_losses, epoch_accuracies, p)
+        plot_loss_and_acc(epoch_losses, epoch_accuracies, p)
+    print("\nNumber of trainable parameters: ", perceptron.coefs_[0].size + perceptron.coefs_[1].size
+            + perceptron.intercepts_[0].size + perceptron.intercepts_[1].size)
 
 def question3(portions):
     print("\nTransformer results:")
     for p in portions:
         print(f"Portion: {p}")
         model, epoch_losses, epoch_acc = transformer_classification(portion=p)
-        # plot_loss_and_acc(epoch_losses, epoch_acc, p)
+        plot_loss_and_acc(epoch_losses, epoch_acc, p)
     print("\nNumber of trainable parameters: ", model.num_parameters())
 
 
