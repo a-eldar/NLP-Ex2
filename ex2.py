@@ -139,10 +139,12 @@ def transformer_classification(portion=1.):
             attention_mask = batch['attention_mask'].to(dev)
             labels = batch['labels'].to(dev)
             ########### add your code here ###########
-            loss: torch.Tensor = criterion(model(input_ids), labels)
+            outputs = model(input_ids=input_ids, attention_mask=attention_mask, labels=labels)
+            loss = outputs.loss
             loss.backward()
             optimizer.step()
-        return
+            total_loss += loss.item()
+        return total_loss / len(data_loader)
 
     def evaluate_model(model, data_loader, dev='cpu', metric=None):
         model.eval()
@@ -151,7 +153,10 @@ def transformer_classification(portion=1.):
             attention_mask = batch['attention_mask'].to(dev)
             labels = batch['labels'].to(dev)
             ########### add your code here ###########
-        return
+            outputs = model(input_ids=input_ids, attention_mask=attention_mask)
+            predictions = outputs.logits.argmax(dim=1)
+            metric.add_batch(predictions=predictions, references=labels)
+        return metric.compute()
 
     x_train, y_train, x_test, y_test = get_data(categories=category_dict.keys(), portion=portion)
 
@@ -174,5 +179,16 @@ def transformer_classification(portion=1.):
     val_loader = DataLoader(val_dataset, batch_size=batch_size)
 
     ########### add your code here ###########
-    return
+    from torch.optim import AdamW
+    optimizer = AdamW(model.parameters(), lr=learning_rate)
+    epoch_losses = []
+    epoch_accuracies = []
+    for epoch in range(epochs):
+        loss = train_epoch(model, train_loader, optimizer, dev)
+        print(f"Epoch {epoch+1}, loss: {loss:.3f}")
+        epoch_losses.append(loss)
+        accuracy = evaluate_model(model, val_loader, dev, metric)
+        print(f"Epoch {epoch+1}, accuracy: {accuracy:.3f}")
+        epoch_accuracies.append(accuracy)
+    return model, epoch_losses, epoch_accuracies
 

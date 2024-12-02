@@ -45,6 +45,14 @@ def question2(portions):
         _, epoch_losses, epoch_accuracies = MLP_classification(portion=p, model=perceptron)
         plot_loss_and_acc(epoch_losses, epoch_accuracies, p)
 
+def question3(portions):
+    print("\nTransformer results:")
+    for p in portions:
+        print(f"Portion: {p}")
+        _, epoch_losses, epoch_acc = transformer_classification(portion=p)
+        plot_loss_and_acc(epoch_losses, epoch_acc, p)
+
+
 if __name__ == "__main__":
     portions = [0.1, 0.2, 0.5, 1.]
     # Q1 - single layer MLP
@@ -52,11 +60,12 @@ if __name__ == "__main__":
 
 
     # Q2 - multi-layer MLP
-    question2(portions)
+    # question2(portions)
 
     # Q3 - Transformer
     # print("\nTransformer results:")
     # for p in portions[:2]:
     #     print(f"Portion: {p}")
     #     transformer_classification(portion=p)
+    question3(portions)
 
