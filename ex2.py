@@ -88,7 +88,7 @@ def MLP_classification(portion=1., model: MLPClassifier=None):
     for epoch in range(NUM_EPOCHS):
         model.partial_fit(x_train, y_train, classes=np.unique(y_train))
         accuracy = model.score(x_test, y_test)
-        print(f"Epoch {epoch+1}, accuracy: {accuracy:.3f}")
+        print(f"Epoch {epoch+1}, accuracy: {round(accuracy, 4)}")
         epoch_accuracies.append(accuracy)
         epoch_losses.append(model.loss_) # loss_ is the loss of the last epoch
         # MLPClassifier's loss function is log loss which is the same as cross-entropy loss
@@ -183,12 +183,12 @@ def transformer_classification(portion=1.):
     optimizer = AdamW(model.parameters(), lr=learning_rate)
     epoch_losses = []
     epoch_accuracies = []
-    for epoch in range(epochs):
-        loss = train_epoch(model, train_loader, optimizer, dev)
-        print(f"Epoch {epoch+1}, loss: {loss:.3f}")
-        epoch_losses.append(loss)
-        accuracy = evaluate_model(model, val_loader, dev, metric)
-        print(f"Epoch {epoch+1}, accuracy: {accuracy:.3f}")
-        epoch_accuracies.append(accuracy)
+    # for epoch in range(epochs):
+    #     loss = train_epoch(model, train_loader, optimizer, dev)
+    #     print(f"Epoch {epoch+1}, loss: {round(loss, 4)}")
+    #     epoch_losses.append(loss)
+    #     accuracy = evaluate_model(model, val_loader, dev, metric)["accuracy"]
+    #     print(f"Epoch {epoch+1}, accuracy: {round(accuracy, 4)}")
+    #     epoch_accuracies.append(accuracy)
     return model, epoch_losses, epoch_accuracies
 
