@@ -5,17 +5,17 @@ import matplotlib.pyplot as plt
 LOSS_COLOR = 'red'
 ACC_COLOR = 'blue'
 
-def plot_loss_and_acc(epoch_losses, epoch_accuracies):
+def plot_loss_and_acc(epoch_losses, epoch_accuracies, portion):
     plt.plot(epoch_losses, color=LOSS_COLOR)
     plt.xlabel('Epoch')
     plt.ylabel('Loss')
-    plt.title('Loss vs Epoch')
+    plt.title(f'Loss vs Epoch, Portion: {portion}')
     plt.show()
 
     plt.plot(epoch_accuracies, color=ACC_COLOR)
     plt.xlabel('Epoch')
     plt.ylabel('Accuracy')
-    plt.title('Accuracy vs Epoch')
+    plt.title(f'Accuracy vs Epoch, Portion: {portion}')
     plt.show()
 
 
@@ -30,7 +30,7 @@ def question1(portions):
             learning_rate_init=0.001,
         )
         _, epoch_losses, epoch_accuracies = MLP_classification(portion=p, model=perceptron)
-        plot_loss_and_acc(epoch_losses, epoch_accuracies)
+        plot_loss_and_acc(epoch_losses, epoch_accuracies, p)
 
 
 def question2(portions):
@@ -43,7 +43,7 @@ def question2(portions):
             learning_rate_init=0.001,
         )
         _, epoch_losses, epoch_accuracies = MLP_classification(portion=p, model=perceptron)
-        plot_loss_and_acc(epoch_losses, epoch_accuracies)
+        plot_loss_and_acc(epoch_losses, epoch_accuracies, p)
 
 if __name__ == "__main__":
     portions = [0.1, 0.2, 0.5, 1.]
