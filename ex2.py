@@ -140,7 +140,7 @@ def transformer_classification(portion=1.):
             labels = batch['labels'].to(dev)
             ########### add your code here ###########
             outputs = model(input_ids=input_ids, attention_mask=attention_mask, labels=labels)
-            loss = outputs.loss
+            loss = criterion(outputs.logits, labels)
             loss.backward()
             optimizer.step()
             total_loss += loss.item()
