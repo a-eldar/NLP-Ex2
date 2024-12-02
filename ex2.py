@@ -183,12 +183,12 @@ def transformer_classification(portion=1.):
     optimizer = AdamW(model.parameters(), lr=learning_rate)
     epoch_losses = []
     epoch_accuracies = []
-    # for epoch in range(epochs):
-    #     loss = train_epoch(model, train_loader, optimizer, dev)
-    #     print(f"Epoch {epoch+1}, loss: {round(loss, 4)}")
-    #     epoch_losses.append(loss)
-    #     accuracy = evaluate_model(model, val_loader, dev, metric)["accuracy"]
-    #     print(f"Epoch {epoch+1}, accuracy: {round(accuracy, 4)}")
-    #     epoch_accuracies.append(accuracy)
+    for epoch in range(epochs):
+        loss = train_epoch(model, train_loader, optimizer, dev)
+        print(f"Epoch {epoch+1}, loss: {round(loss, 4)}")
+        epoch_losses.append(loss)
+        accuracy = evaluate_model(model, val_loader, dev, metric)["accuracy"]
+        print(f"Epoch {epoch+1}, accuracy: {round(accuracy, 4)}")
+        epoch_accuracies.append(accuracy)
     return model, epoch_losses, epoch_accuracies
 
